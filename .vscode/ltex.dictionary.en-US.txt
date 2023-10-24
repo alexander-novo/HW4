@@ -1,0 +1,10 @@
+Cholesky
+nonsingular
+Novotny
+Zuriah
+approximant
+submatrix
+SVDs
+Schur
+Trefethen
+logarithmically

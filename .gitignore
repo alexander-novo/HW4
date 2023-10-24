@@ -1,0 +1,15 @@
+# Latex stuff
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.synctex(busy)
+*.xdv
+_minted-*/
+out/
+
+# Added by cargo
+
+/target

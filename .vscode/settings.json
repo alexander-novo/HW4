@@ -1,0 +1,33 @@
+{
+	"spellright.language": [
+		"en"
+	],
+	"spellright.documentTypes": [
+		"markdown"
+	],
+	"latex-workshop.latex.recipes": [
+		{
+			"name": "latexmk (xelatex)",
+			"tools": [
+				"xelatexmk"
+			]
+		}
+	],
+	"latex-workshop.latex.tools": [
+		{
+			"name": "xelatexmk",
+			"command": "latexmk",
+			"args": [
+				"-synctex=1",
+				"-shell-escape",
+				"-interaction=nonstopmode",
+				"-file-line-error",
+				"-xelatex",
+				"-outdir=%OUTDIR%",
+				"%DOC%"
+			],
+			"env": {}
+		}
+	],
+	"latex-workshop.latex.recipe.default": "first"
+}
