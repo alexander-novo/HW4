@@ -66,7 +66,15 @@
 	      \]
 	      Show that Gaussian elimination with partial pivoting does not actually permute any rows, i.e., that it is identical to Gaussian elimination without pivoting. Hint: Show that after one step of Gaussian elimination, the trailing \((n - 1)\text{-by-}(n - 1)\) submatrix, the \emph{Schur complement} of \(a_{11}\) in \(\mat{A}\), is still diagonally dominant.
 	      \begin{proof}
-
+		      Our first step of Gaussian elimination can be seen as:
+		      \begin{align*}
+			      \mat{A} & = \mqty[\alpha_{11} & \vec{c}^\top \\ \vec{a} & \hat{\mat{A}}] = \mqty[1 & \vec{0} \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} & \vec{c}^\top \\ \vec{0} & \hat{\mat{A}} - \vec{l}\vec{c}^\top],
+		      \end{align*}
+		      where \(\vec{l} = \frac{\vec{a}}{\alpha_{11}}\). Note that \(c_i = \alpha_{1,i + 1},\ l_i = \frac{\alpha_{i + 1, 1}}{\alpha_{11}}\) and for \(\mat{B} = \hat{\mat{A}} - \vec{l}\vec{c}^\top\), we have \(b_{ij} = \alpha_{i + 1, j + 1} - l_i c_j = \alpha_{i + 1, j + 1} - \frac{\alpha_{i + 1, 1} \alpha_{1,j + 1}}{\alpha_{11}}\). Then we have
+		      \begin{align*}
+			      |b_{ii}| & = \vqty{|\alpha_{i + 1, i + 1} - \frac{\alpha_{i + 1, 1} \alpha_{1,j + 1}}{\alpha_{11}}}  \\
+			               & \geq |\alpha_{i + 1, i + 1}| - \frac{|\alpha_{i + 1, 1}| |\alpha_{1,i + 1}|}{\alpha_{11}} \\
+		      \end{align*}
 	      \end{proof}
 
 	      % 3
