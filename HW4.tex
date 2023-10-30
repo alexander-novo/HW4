@@ -84,7 +84,43 @@
 		      \mat{A}\mat{A}^+          & = (\mat{A}\mat{A}^+)^\top.
 	      \end{align*}
 	      \begin{proof}
-
+		      We have
+		      \begin{align*}
+			      \mat{A}\mat{A}^+\mat{A} & = \mat{A}\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top}\mat{A}                          \\
+			                              & = \mat{A}\cancel{\qty(\mat{A}^{\top}\mat{A})^{-1}}\cancel{\qty(\mat{A}^{\top}\mat{A}) } \\
+			                              & = \mat{A}.
+		      \end{align*}
+		      Then,
+		      \begin{align*}
+			      \mat{A}^+\mat{A}\mat{A}^+ & = \qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top}\mat{A}\mat{A}^+                     \\
+			                                & = \cancel{\qty(\mat{A}^{\top}\mat{A})^{-1}}\cancel{(\mat{A}^{\top}\mat{A})}\mat{A}^+ \\
+			                                & = \mat{A}^+.
+		      \end{align*}
+		      Further,
+		      \begin{align*}
+			      \mat{A}^+\mat{A} & = \qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top}\mat{A}                          \\
+			                       & = \cancel{\qty(\mat{A}^{\top}\mat{A})^{-1}}\cancel{\qty(\mat{A}^{\top}\mat{A}) } \\
+			                       & = \mat{I},
+		      \end{align*}
+		      and
+		      \begin{align*}
+			      (\mat{A}^+\mat{A})^\top & = \mat{A}^{\top} (\mat{A}^+)^{\top}                                                \\
+			                              & = \mat{A}^{\top} (\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top})^{\top}           \\
+			                              & = \mat{A}^{\top} \mat{A} \qty(\qty(\mat{A}^{\top}\mat{A})^{-1})^{\top}             \\
+			                              & = \mat{A}^{\top} \mat{A} \qty(\qty(\mat{A}^{\top}\mat{A})^{\top})^{-1}             \\
+			                              & = \cancel{\qty(\mat{A}^{\top} \mat{A})} \cancel{\qty(\mat{A}^{\top} \mat{A})^{-1}} \\
+			                              & = \mat{I},
+		      \end{align*}
+		      so \(\mat{A}^+\mat{A}= (\mat{A}^+\mat{A})^\top\).
+		      Finally,
+		      \begin{align*}
+			      (\mat{A}\mat{A}^+)^\top & = \qty(\mat{A}^+)^{\top}\mat{A}^\top                                  \\
+			                              & = (\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top})^{\top}\mat{A}^\top \\
+			                              & = \mat{A}\qty(\qty(\mat{A}^{\top}\mat{A})^{-1})^{\top}\mat{A}^\top    \\
+			                              & = \mat{A}\qty(\qty(\mat{A}^{\top}\mat{A})^{\top})^{-1}\mat{A}^\top    \\
+			                              & = \mat{A}\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^\top                 \\
+			                              & =\mat{A}\mat{A}^+.
+		      \end{align*}
 	      \end{proof}
 
 	      % 5
