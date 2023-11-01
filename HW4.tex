@@ -54,9 +54,46 @@
 
 \begin{enumerate}[leftmargin=\labelsep]
 	% 1
-	\item Let \(\mat{L}\) be a lower triangular matrix and solve \(\mat{L}\vec{x} = \vec{b}\) by forward substitution. Show that barring overflow or underflow, the computed solution \(\vec{x}\) satisfies \((\mat{L} + \delta\mat{L})\vec{x} = \vec{b}\), where \(|\delta l_{ij}| \leq n\varepsilon|l_{ij}|\), where \(\varepsilon\) is the machine precision. This means that forward substitution is backward stable. Argue that backward substitution for solving upper triangular systems satisfies the same bound.
+	\item Let \(\mat{L}\) be a lower triangular matrix and solve \(\mat{L}\vec{x} = \vec{b}\) by forward substitution. Show that barring overflow or underflow, the computed solution \(\hat{x}\) satisfies \((\mat{L} + \delta\mat{L})\hat{x} = \vec{b}\), where \(|\delta l_{ij}| \leq n\varepsilon|l_{ij}|\), where \(\varepsilon\) is the machine precision. This means that forward substitution is backward stable. Argue that backward substitution for solving upper triangular systems satisfies the same bound.
 	      \begin{proof}
-
+		      We have, for the true solution \(\vec{x}\),
+		      \[
+			      x_i = \qty(b_i - \sum_{k = 1}^{i-1} l_{ik}x_k) / l_{ii}.
+		      \]
+		      For the solution \(\hat{x}\) computed via backwards substitution,
+		      \begin{align*}
+			      \hat{x}_i & = \qty(b_i - \sum_{k = 1}^{i-1} \qty[l_{ik}\hat{x}_k(1 + \varepsilon^*_k) \prod_{j=k}^{i-1}(1 + \varepsilon^+_k)])(1 + \varepsilon^-)(1 + \varepsilon^/) / l_{ii}                                              \\
+			      \shortintertext{(where \(|\varepsilon^*_k|, |\varepsilon^+_k|, |\varepsilon^-|, |\varepsilon^/| < eps\))}
+			                & = \qty(b_i - \sum_{k = 1}^{i-1} \qty[l_{ik}(1 + \varepsilon^*_k) \prod_{j=k}^{i-1}(1 + \varepsilon^+_j)]\hat{x}_k) / \qty(\frac{l_{ii}}{(1 + \varepsilon^-)(1 + \varepsilon^/)})                               \\
+			                & = \qty(b_i - \sum_{k = 1}^{i-1} \qty[l_{ik}\qty(1 + \varepsilon^*_k + \sum_{j=k}^{i-1}\varepsilon^+_j + \mathcal{O}(eps^2))]\hat{x}_k) / \qty(l_{ii}(1 - \varepsilon^- - \varepsilon^/ + \mathcal{O}(eps^2))).
+		      \end{align*}
+		      Then we have that \((\mat{L} + \delta\mat{L})\hat{x} = \vec{b}\) for
+		      \begin{alignat*}{4}
+			               &  & \delta l_{ij}   & = \begin{cases}
+				                                        l_{ij} (- \varepsilon^- - \varepsilon^/),                       & \quad i = j    \\
+				                                        l_{ij} \qty(\varepsilon^*_j + \sum_{k=j}^{i-1}\varepsilon^+_k), & \quad i \neq j
+			                                        \end{cases}          \\
+			               &  &                 & = l_{ij} \begin{cases}
+				                                               - \varepsilon^- - \varepsilon^/,                   & \quad i = j    \\
+				                                               \varepsilon^*_j + \sum_{k=j}^{i-1}\varepsilon^+_k, & \quad i \neq j
+			                                               \end{cases}                \\
+			      \implies &  & |\delta l_{ij}| & = |l_{ij}| \begin{cases}
+				                                                 |(- \varepsilon^- - \varepsilon^/)|,                      & \quad i = j    \\
+				                                                 \vqty{\varepsilon^*_j + \sum_{k=j}^{i-1}\varepsilon^+_k}, & \quad i \neq j
+			                                                 \end{cases} \\
+			      \shortintertext{(note that for \(i = 1,\ \varepsilon^- = 0\), since we subtract by 0 - which will never round)}
+			               &  &                 & \leq |l_{ij}| \begin{cases}
+				                                                    |\varepsilon^/|,                                       & \quad i = j = 1    \\
+				                                                    |\varepsilon^-| + |\varepsilon^/|,                     & \quad i = j \neq 1 \\
+				                                                    |\varepsilon^*_j| + \sum_{k=j}^{i-1}|\varepsilon^+_k|, & \quad i \neq j
+			                                                    \end{cases}   \\
+			               &  &                 & \leq |l_{ij}| \begin{cases}
+				                                                    eps,        & \quad i = j = 1    \\
+				                                                    2eps,       & \quad i = j \neq 1 \\
+				                                                    (i-j+1)eps, & \quad i \neq j
+			                                                    \end{cases}                                              \\
+			               &  &                 & \leq n \cdot eps |l_{ij}|
+		      \end{alignat*}
 	      \end{proof}
 
 	      % 2
@@ -72,7 +109,7 @@
 			              & = \mqty[1           & 0              \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} \vec{c}^{\top} \\ 0 & \hat{\mat{A}}-\vec{l}\vec{c}^{\top}] \\
 			              & = \mqty[1           & 0              \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} \vec{c}^{\top} \\ 0 & \mat{B}]
 		      \end{align*}
-			  where \(\vec{l} = \frac{\vec{a}}{\alpha_{11}}\). Note that \(c_i = \alpha_{1,i + 1},\ l_i = \frac{\alpha_{i + 1, 1}}{\alpha_{11}}\). Then, denote the submatrix \(\mat{B}=\hat{\mat{A}}-\vec{l}\vec{c}^{\top}\). Now, it is sufficient to show that \(\mat{B}\) is diagonally dominant, since then we could continue each step of Gaussian elimination recursively always getting a diagonally dominant submatrix. First note
+		      where \(\vec{l} = \frac{\vec{a}}{\alpha_{11}}\). Note that \(c_i = \alpha_{1,i + 1},\ l_i = \frac{\alpha_{i + 1, 1}}{\alpha_{11}}\). Then, denote the submatrix \(\mat{B}=\hat{\mat{A}}-\vec{l}\vec{c}^{\top}\). Now, it is sufficient to show that \(\mat{B}\) is diagonally dominant, since then we could continue each step of Gaussian elimination recursively always getting a diagonally dominant submatrix. First note
 		      \begin{equation}
 			      \beta_{ji} = \alpha_{j+1,i+1} - \frac{\alpha_{j+1,1}\alpha_{1,i+1}}{\alpha_{11}} \label{eq:bji}
 		      \end{equation}
@@ -84,10 +121,10 @@
 		      \begin{align*}
 			      \abs{\beta_{ii}} & \stackrel{\mathclap{\eqref{eq:bji}}}{=} \abs{\alpha_{j+1,i+1} - \frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}}                \\
 			                       & \geq \abs{\alpha_{j+1,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}} \qquad\text{by reverse triangle inequality} \\
-								   & \stackrel{\mathclap{\eqref{eq:diagdom}}}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}} \\
-								   & \stackrel{???}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{1,i+1}}{\alpha_{11}}}\qty( \abs{\alpha_{11}} - \sum_{\substack{j=1\\j\neq 1,i+1}}^n \abs{\alpha_{j,1}}) \\
-								   & = \sum_{\substack{j=1\\j\neq i+1}}^n \abs{a_{j,i+1}}
-			  \end{align*}
+			                       & \stackrel{\mathclap{\eqref{eq:diagdom}}}{>} \sum_{\substack{j=1                                                                  \\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}} \\
+			                       & \stackrel{???}{>} \sum_{\substack{j=1                                                                                            \\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{1,i+1}}{\alpha_{11}}}\qty( \abs{\alpha_{11}} - \sum_{\substack{j=1\\j\neq 1,i+1}}^n \abs{\alpha_{j,1}}) \\
+			                       & = \sum_{\substack{j=1                                                                                                            \\j\neq i+1}}^n \abs{a_{j,i+1}}
+		      \end{align*}
 	      \end{proof}
 
 	      % 3
