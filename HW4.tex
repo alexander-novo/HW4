@@ -72,7 +72,7 @@
 			              & = \mqty[1           & 0              \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} \vec{c}^{\top} \\ 0 & \hat{\mat{A}}-\vec{l}\vec{c}^{\top}] \\
 			              & = \mqty[1           & 0              \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} \vec{c}^{\top} \\ 0 & \mat{B}]
 		      \end{align*}
-		      where we denote the submatrix \(\mat{B}=\hat{\mat{A}}-\vec{l}\vec{c}^{\top}\). Now, it is sufficient to show that \(\mat{B}\) is diagonally dominant, since then we could continue each step of Gaussian elimination recursively always getting a diagonally dominant submatrix. First note
+			  where \(\vec{l} = \frac{\vec{a}}{\alpha_{11}}\). Note that \(c_i = \alpha_{1,i + 1},\ l_i = \frac{\alpha_{i + 1, 1}}{\alpha_{11}}\). Then, denote the submatrix \(\mat{B}=\hat{\mat{A}}-\vec{l}\vec{c}^{\top}\). Now, it is sufficient to show that \(\mat{B}\) is diagonally dominant, since then we could continue each step of Gaussian elimination recursively always getting a diagonally dominant submatrix. First note
 		      \begin{equation}
 			      \beta_{ji} = \alpha_{j+1,i+1} - \frac{\alpha_{j+1,1}\alpha_{1,i+1}}{\alpha_{11}} \label{eq:bji}
 		      \end{equation}
@@ -87,7 +87,7 @@
 								   & \stackrel{\mathclap{\eqref{eq:diagdom}}}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}} \\
 								   & \stackrel{???}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{1,i+1}}{\alpha_{11}}}\qty( \abs{\alpha_{11}} - \sum_{\substack{j=1\\j\neq 1,i+1}}^n \abs{\alpha_{j,1}}) \\
 								   & = \sum_{\substack{j=1\\j\neq i+1}}^n \abs{a_{j,i+1}}
-		      \end{align*}
+			  \end{align*}
 	      \end{proof}
 
 	      % 3
@@ -105,7 +105,43 @@
 		      \mat{A}\mat{A}^+          & = (\mat{A}\mat{A}^+)^\top.
 	      \end{align*}
 	      \begin{proof}
-
+		      We have
+		      \begin{align*}
+			      \mat{A}\mat{A}^+\mat{A} & = \mat{A}\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top}\mat{A}                          \\
+			                              & = \mat{A}\cancel{\qty(\mat{A}^{\top}\mat{A})^{-1}}\cancel{\qty(\mat{A}^{\top}\mat{A}) } \\
+			                              & = \mat{A}.
+		      \end{align*}
+		      Then,
+		      \begin{align*}
+			      \mat{A}^+\mat{A}\mat{A}^+ & = \qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top}\mat{A}\mat{A}^+                     \\
+			                                & = \cancel{\qty(\mat{A}^{\top}\mat{A})^{-1}}\cancel{(\mat{A}^{\top}\mat{A})}\mat{A}^+ \\
+			                                & = \mat{A}^+.
+		      \end{align*}
+		      Further,
+		      \begin{align*}
+			      \mat{A}^+\mat{A} & = \qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top}\mat{A}                          \\
+			                       & = \cancel{\qty(\mat{A}^{\top}\mat{A})^{-1}}\cancel{\qty(\mat{A}^{\top}\mat{A}) } \\
+			                       & = \mat{I},
+		      \end{align*}
+		      and
+		      \begin{align*}
+			      (\mat{A}^+\mat{A})^\top & = \mat{A}^{\top} (\mat{A}^+)^{\top}                                                \\
+			                              & = \mat{A}^{\top} (\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top})^{\top}           \\
+			                              & = \mat{A}^{\top} \mat{A} \qty(\qty(\mat{A}^{\top}\mat{A})^{-1})^{\top}             \\
+			                              & = \mat{A}^{\top} \mat{A} \qty(\qty(\mat{A}^{\top}\mat{A})^{\top})^{-1}             \\
+			                              & = \cancel{\qty(\mat{A}^{\top} \mat{A})} \cancel{\qty(\mat{A}^{\top} \mat{A})^{-1}} \\
+			                              & = \mat{I},
+		      \end{align*}
+		      so \(\mat{A}^+\mat{A}= (\mat{A}^+\mat{A})^\top\).
+		      Finally,
+		      \begin{align*}
+			      (\mat{A}\mat{A}^+)^\top & = \qty(\mat{A}^+)^{\top}\mat{A}^\top                                  \\
+			                              & = (\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top})^{\top}\mat{A}^\top \\
+			                              & = \mat{A}\qty(\qty(\mat{A}^{\top}\mat{A})^{-1})^{\top}\mat{A}^\top    \\
+			                              & = \mat{A}\qty(\qty(\mat{A}^{\top}\mat{A})^{\top})^{-1}\mat{A}^\top    \\
+			                              & = \mat{A}\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^\top                 \\
+			                              & =\mat{A}\mat{A}^+.
+		      \end{align*}
 	      \end{proof}
 
 	      % 5
