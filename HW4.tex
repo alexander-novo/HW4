@@ -61,12 +61,33 @@
 
 	      % 2
 	\item Matrix \(\mat{A}\) is called \emph{strictly column diagonally dominant}, or diagonally dominant for short, if
-	      \[
-		      |a_{ii}| > \sum_{j=1, j \neq i}^{n} |a_{ji}|
-	      \]
+	      \begin{equation}
+		      |a_{ii}| > \sum_{j=1, j \neq i}^{n} |a_{ji}| \label{eq:diagdom}
+	      \end{equation}
 	      Show that Gaussian elimination with partial pivoting does not actually permute any rows, i.e., that it is identical to Gaussian elimination without pivoting. Hint: Show that after one step of Gaussian elimination, the trailing \((n - 1)\text{-by-}(n - 1)\) submatrix, the \emph{Schur complement} of \(a_{11}\) in \(\mat{A}\), is still diagonally dominant.
 	      \begin{proof}
-
+		      For a diagonally dominant matrix \(\mat{A}\), the first step of Gaussian elimination with partial pivoting does not permute any rows, since \(|\alpha_{ii}| > \sum_{j=1, j \neq i}^{n} |\alpha_{ji}|\) and thus \(|\alpha_{ii}| > |\alpha_{ji}|\) for any \(j\neq i\). Then, we have the decomposition for \(\mat{A}\) given by the first step of Gaussian elimination as
+		      \begin{align*}
+			      \mat{A} & = \mqty[\alpha_{11} & \vec{c}^{\top} \\ \vec{a} & \hat{\mat{A}}]\\
+			              & = \mqty[1           & 0              \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} \vec{c}^{\top} \\ 0 & \hat{\mat{A}}-\vec{l}\vec{c}^{\top}] \\
+			              & = \mqty[1           & 0              \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} \vec{c}^{\top} \\ 0 & \mat{B}]
+		      \end{align*}
+		      where we denote the submatrix \(\mat{B}=\hat{\mat{A}}-\vec{l}\vec{c}^{\top}\). Now, it is sufficient to show that \(\mat{B}\) is diagonally dominant, since then we could continue each step of Gaussian elimination recursively always getting a diagonally dominant submatrix. First note
+		      \begin{equation}
+			      \beta_{ji} = \alpha_{j+1,i+1} - \frac{\alpha_{j+1,1}\alpha_{1,i+1}}{\alpha_{11}} \label{eq:bji}
+		      \end{equation}
+		      is the expression for the elements in \(\mat{B}\) by definition. Further, from \cref{eq:diagdom} we can split one of the terms out of the sum, and we have
+		      \begin{equation}
+			      \abs{\alpha_{ii}} - \sum_{\substack{j=1\\j\neq i,k}} \abs{\alpha_{ji}} > \abs{\alpha_{ki}}. \label{eq:diagdomk}
+		      \end{equation}
+		      We have
+		      \begin{align*}
+			      \abs{\beta_{ii}} & \stackrel{\mathclap{\eqref{eq:bji}}}{=} \abs{\alpha_{j+1,i+1} - \frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}}                \\
+			                       & \geq \abs{\alpha_{j+1,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}} \qquad\text{by reverse triangle inequality} \\
+								   & \stackrel{\mathclap{\eqref{eq:diagdom}}}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}} \\
+								   & \stackrel{???}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{1,i+1}}{\alpha_{11}}}\qty( \abs{\alpha_{11}} - \sum_{\substack{j=1\\j\neq 1,i+1}}^n \abs{\alpha_{j,1}}) \\
+								   & = \sum_{\substack{j=1\\j\neq i+1}}^n \abs{a_{j,i+1}}
+		      \end{align*}
 	      \end{proof}
 
 	      % 3
@@ -76,7 +97,7 @@
 	      \end{proof}
 
 	      % 4
-	\item Show that the Moore—Penrose pseudoinverse of A satisfies the following identities:
+	\item Show that the Moore—Penrose pseudoinverse of \(\mat{A}\) satisfies the following identities:
 	      \begin{align*}
 		      \mat{A}\mat{A}^+\mat{A}   & = \mat{A},                 \\
 		      \mat{A}^+\mat{A}\mat{A}^+ & = \mat{A}^+,               \\

@@ -8,3 +8,4 @@ SVDs
 Schur
 Trefethen
 logarithmically
+pseudoinverse
