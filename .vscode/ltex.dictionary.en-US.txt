@@ -9,3 +9,4 @@ Schur
 Trefethen
 logarithmically
 pseudoinverse
+de-recursed

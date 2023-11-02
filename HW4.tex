@@ -13,6 +13,8 @@
 \usepackage{halloweenmath}
 \usepackage{unicode-math}
 
+\usepackage[linesnumbered,ruled]{algorithm2e}
+
 \setmathfont{latinmodern-math.otf}
 \setmathfont{texgyrepagella-math.otf}[range=bb]
 
@@ -27,6 +29,7 @@
 \crefname{enumi}{part}{parts}
 \crefname{algocf}{algorithm}{algorithms}
 
+\newtheorem{theorem}{Theorem}
 \theoremstyle{definition}
 \newtheorem*{answer}{Answer}
 
@@ -186,10 +189,75 @@
 	      \begin{enumerate}
 		      \item Describe a variant of Gaussian elimination that introduces zeros into the columns of \(\mat{A}\) in the order \(n\) : -1 : 2 and which produces the factorization \(\mat{A} = \mat{U}\mat{L}\) where \(\mat{U}\) is the unit upper triangular and \(\mat{L}\) is lower triangular.
 		            \begin{answer}
+			            Note that for a \(1 \times 1\) matrix \(\mat{A}\), we have \(\mat{A} = \mat{I}\mat{A}\), where \(\mat{I}\) is unit upper triangular, and \(\mat{A}\) is lower triangular. Then for an \(n \times n\) matrix \(\mat{A}\), we have
+			            \begin{align}
+				            \mat{A} & = \mqty[\hat{\mat{A}} & \vec{a} \\\vec{c}^\top&\alpha_{nn}]\\
+				                    & = \mqty[\mat{I}       & \vec{l} \\\vec{0}^\top&1]\mqty[\hat{\mat{A}}-\vec{l}\vec{c}^\top&\vec{0}\\\vec{c}^\top&\alpha_{nn}],
+			            \end{align}
+			            for \(\vec{l} = \frac{\vec{a}}{\alpha_{11}}\). Assume, by induction, that \(\hat{\mat{A}}-\vec{l}\vec{c}^\top = \mat{U}_1\mat{L}_1\) for some \(n-1 \times n-1\) unit upper triangular matrix \(\mat{U}_1\) and lower triangular matrix \(\mat{L}_1\). Then we have
+			            \begin{align*}
+				            \mat{A} & = \mqty[\mat{I}   & \vec{l} \\\vec{0}^\top&1]\mqty[\mat{U}_1\mat{L}_1&\vec{0}\\\vec{c}^\top&\alpha_{nn}]\\
+				                    & = \mqty[\mat{U}_1 & \vec{l} \\\vec{0}^\top&1]\mqty[\mat{L}_1&\vec{0}\\\vec{c}^\top&\alpha_{nn}]\\
+				                    & = \mat{U}\mat{L},
+			            \end{align*}
+			            where \(\mat{U}\) is the unit upper triangular and \(\mat{L}\) is lower triangular. This produces a recursive algorithm, which can be seen in \cref{alg:ul-recursive}.
+
+			            \begin{algorithm}
+				            \caption{A recursive algorithm to factorize \(\mat{A} = \mat{U}\mat{L}\) where \(\mat{U}\) is unit upper triangular and \(\mat{L}\) is lower triangular.}
+				            \label{alg:ul-recursive}
+				            \KwData{\(\mat{A}\)}
+				            \KwResult{\(\mat{U}, \mat{L}\)}
+				            \(\vec{l} \gets \vec{a} / \alpha_{11}\)\;
+				            Factorize \(\hat{\mat{A}} - \vec{l}\vec{c}^\top = \mat{U}_1\mat{L_1}\)\;
+				            \(\mat{U} \gets \mqty[\mat{U}_1 & \vec{l} \\\vec{0}^\top&1]\)\;
+				            \(\mat{L} \gets \mqty[\mat{L}_1&\vec{0}\\\vec{c}^\top&\alpha_{nn}]\)\;
+			            \end{algorithm}
+
+			            If we pre-allocate space for the entirety of \(\mat{U}, \mat{L}\), this algorithm is tail-recursive, and can be de-recursed. As well, only the entries above the diagonal of \(\mat{U}\) are modified, and only the entries on and below the diagonal of \(\mat{L}\) are modified - so they can be stored in the same matrix. This leads to \cref{alg:ul-iterative}.
+
+			            \begin{algorithm}
+				            \caption{An iterative algorithm to factorize \(\mat{A} = \mat{U}\mat{L}\) where \(\mat{U}\) is unit upper triangular and \(\mat{L}\) is lower triangular.}
+				            \label{alg:ul-iterative}
+				            \KwData{\(\mat{A}\)}
+				            \KwResult{\(\mat{UL}\) - a single matrix which stores the entries of \(\mat{U}\) above the diagonal and the entries of \(\mat{L}\) below the diagonal.}
+				            \(\mat{UL} \gets \mat{A}\)\;
+				            \For{$i\leftarrow n$ \KwTo $2$}{
+					            \(\mat{UL}[1:i-1,\ i] \gets \mat{UL}[1:i-1,\ i] / \mat{UL}_{ii}\)\;
+					            \tcc{Note that \(\mat{UL}[1:i-1,\ 1:i-1]\) is unused for the solution so far - we can use this to store \(\hat{\mat{A}} - \vec{l}\vec{c}^\top\).}
+					            \(\mat{UL}[1:i-1,\ 1:i-1] \gets \mat{UL}[1:i-1,\ 1:i-1] - \mat{UL}[1:i-1,\ i] \cdot \mat{UL}[i,\ 1:i-1]\);
+				            }
+			            \end{algorithm}
+
+			            Note that in the case where it is not necessary to preserve \(\mat{A}\), we can use \(\mat{UL} = \mat{A}\)
 		            \end{answer}
 
 		      \item Based on your algorithm, prove/provide the necessary and sufficient determinant conditions for the existence of the UL decomposition.
 		            \begin{answer}
+			            \begin{theorem}
+				            The following two statements are equivalent:
+				            \begin{enumerate}
+					            \item There exist a unique unit upper triangular matrix \(\mat{U}\) and nonsingular lower triangular matrix \(\mat{L}\) such that \(\mat{A} = \mat{U}\mat{L}\).
+					            \item All trailing principal submatrices of \(\mat{A}\) are nonsingular.
+				            \end{enumerate}
+			            \end{theorem}
+			            \begin{proof}\hfill
+				            \begin{itemize}
+					            \item[\(\implies\)] For a trailing submatrix \(\mat{A}_{ii}\), we have
+					                  \[
+						                  \mat{A} = \mqty[\mat{A}_{11}&\mat{A}_{1i}\\\mat{A}_{i1}&\mat{A}_{ii}] = \mqty[\mat{U}_{11}&\mat{U}_{1i}\\\mat{0}&\mat{U}_{ii}] \mqty[\mat{L}_{11}&\mat{0}\\\mat{L}_{i1}&\mat{L}_{ii}] = \mat{U}\mat{L}.
+					                  \]
+					                  Then \(\det(\mat{A}_{ii}) = \det(\mat{U}_{ii}\mat{L}_{ii}) = \det(\mat{U}_{ii})\det(\mat{L}_{ii}) = 1 \cdot \prod_{k=1}^i (\mat{L}_{ii})_{kk} \neq 0\), since \(\mat{U}\) is unit upper triangular and \(\mat{L}\) is nonsingular lower triangular.
+					            \item[\(\impliedby\)] Note that this is trivially true for a \(1 \times 1\) matrix. Then, by induction, assume there exist a unique unit upper triangular matrix \(\mat{U}\) and nonsingular lower triangular matrix \(\mat{L}\) such that \(\mat{A} = \mat{U}\mat{L}\) for all \(n-1 \times n-1\) matrices with all trailing principal submatrices nonsingular. For
+					                  \begin{align*}
+						                  \mat{A}       & = \mqty[\hat{\mat{A}} & \vec{a} \\\vec{c}^\top&\alpha_{nn}],\\
+						                  \shortintertext{and}
+						                  \hat{\mat{A}} & = \mat{U}_1\mat{L}_1,           \\
+						                  \shortintertext{which exist by assumption, we have}
+						                  \mat{A}       & = \mqty[\mat{U}_1     & \vec{l} \\\vec{0}^\top&1]\mqty[\mat{L}_1&\vec{0}\\\vec{c}^\top&\alpha_{nn}],
+					                  \end{align*}
+					                  where \(\vec{l} = \vec{a} / \alpha_{nn}\). Note, then that \(0 \neq \det(\mat{A}) = \det(\mat{L}_1) \alpha_{nn}\), so \(\alpha_{nn} \neq 0\), and the lower triangular matrix is nonsingular.
+				            \end{itemize}
+			            \end{proof}
 		            \end{answer}
 
 		      \item Write a Matlab code to implement the UL decomposition and apply it to
