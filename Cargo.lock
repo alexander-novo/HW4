@@ -3,13 +3,6 @@
 version = 3
 
 [[package]]
-name = "MATH5424-HW4"
-version = "0.1.0"
-dependencies = [
- "nalgebra",
-]
-
-[[package]]
 name = "approx"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -29,6 +22,13 @@ name = "bytemuck"
 version = "1.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "374d28ec25809ee0e23827c2ab573d729e293f281dfe393500e7ad618baa61c6"
+
+[[package]]
+name = "hw4"
+version = "0.1.0"
+dependencies = [
+ "nalgebra",
+]
 
 [[package]]
 name = "matrixmultiply"
