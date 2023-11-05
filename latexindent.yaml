@@ -1,0 +1,9 @@
+lookForAlignDelims:
+   alignat*:
+      alignFinalDoubleBackSlash: 1
+   align*:
+      alignFinalDoubleBackSlash: 1
+   alignat:
+      alignFinalDoubleBackSlash: 1
+   align:
+      alignFinalDoubleBackSlash: 1
