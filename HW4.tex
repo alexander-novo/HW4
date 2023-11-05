@@ -14,6 +14,8 @@
 \usepackage{unicode-math}
 
 \usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{pgfplots}
+\usepackage{xfrac}
 
 \setmathfont{latinmodern-math.otf}
 \setmathfont{texgyrepagella-math.otf}[range=bb]
@@ -279,6 +281,30 @@
 
 	      Use the command \texttt{n = ceil(logspace(1, 3, 1000))} to create (approximately) logarithmically spaced matrix dimensions between 10 and 1000. Some of the dimensions will be repeated. The variable \texttt{n} is a vector of size 1000 with entries ranging from 10 to 1000. Then, for every entry \texttt{n(i)} of \texttt{n}, i.e., for \(i = 1, 2, \dots , 1000\), create a random matrix \(\mat{A}\) using \texttt{A= randn(n(i), n(i))/sqrt(n(i))}. So, we are creating a random matrix of varying dimensions with normally distributed entries having mean zero and standard deviation \(\sqrt{n(i)}\). Then, compute the growth factor \(\rho_{pp}\) for every \(\mat{A}\). At the end you will have a vector of size 1000 whose entries corresponding to the growth factor for every random \(\mat{A}\). Using the \texttt{loglog} command (logarithmic scale both in the horizontal and 2 vertical axes), plot the growth factor vs the matrix dimensions \texttt{n}. On the same plot, by using the \texttt{hold on} command, plot the growth rate of \(\sqrt{n}\). How is the observed/numerical growth behaving with respect to the theoretical upper bound \(2n-1\) and with respect to \(\sqrt{n}\) ? Comment on your observations.
 	      \begin{answer}
+		      \begin{figure}
+			      \centering
+			      \begin{tikzpicture}
+				      \begin{loglogaxis}[
+						      width = .9\textwidth,
+						      height = .4\textwidth,
+						      legend pos = north west,
+						      xlabel = {\(n\)},
+						      set layers,
+						      mark layer = axis tick labels,
+					      ]
+					      \addplot+[draw = none] table [
+							      y expr = \thisrowno{1},
+							      x expr = \thisrowno{0},
+						      ] {out/output7.txt};
+					      \addlegendentry{\(\rho_{pp}\)}
+					      \addplot+ [domain=10:1000, no marks,very thick ] {sqrt(x)/2.0};
+					      \addlegendentry{\(\mathcal{O}\qty(\sqrt{n})\)}
+					      %   \addplot+ [domain=10:1000, no marks,very thick ] {(x)^(3/4)/4.0};
+					      %   \addlegendentry{\(\mathcal{O}\qty({n}^{\sfrac{3}{4}})\)}
+				      \end{loglogaxis}
+			      \end{tikzpicture}
+			      \caption{Growth rate of \(\rho_{pp}\) vs. \(\sqrt{n}\).}\label{fig:rhopp}
+		      \end{figure}
 	      \end{answer}
 \end{enumerate}
 

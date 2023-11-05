@@ -1,4 +1,4 @@
-use nalgebra::DMatrix;
+use nalgebra::{DMatrix, LU};
 use rand_distr::StandardNormal;
 use std::{
     error::Error,
@@ -10,11 +10,17 @@ fn main() -> Result<(), Box<dyn Error>> {
     create_dir_all("./out/")?;
     let f = File::create("out/output7.txt")?;
     for n in ceil_logspace(1., 3., 1000) {
-        //A= randn(n, n)/sqrt(n)
-        let mut a =
+        // A= randn(n, n)/sqrt(n)
+        let a =
             DMatrix::<f64>::from_distribution(n, n, &StandardNormal, &mut rand::thread_rng())
                 / (n as f64).sqrt();
-        let rho_pp = 3;
+
+        // $\(\rho_{pp} = \sfrac{(\max_{i,j} |u_{ij}|)}{(\max_{i,j} |a_{ij}|)}\)$
+        // store $\(\max_{i,j} |a_{ij}| \)$
+        let a_max = a.amax();
+        let u_max = LU::new(a).u().amax();
+
+        let rho_pp = u_max / a_max;
 
         writeln!(&f, "{n} {rho_pp}")?;
     }
