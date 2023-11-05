@@ -147,7 +147,7 @@
 		      \mat{A}\mat{A}^+          & = (\mat{A}\mat{A}^+)^\top.
 	      \end{align*}
 	      \begin{proof}
-		      We have
+		      Assuming we have a full rank matrix \(\mat{A}\) with more rows than columns, \(\mat{A}^+=\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top}\), and we have
 		      \begin{align*}
 			      \mat{A}\mat{A}^+\mat{A} & = \mat{A}\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^{\top}\mat{A}                          \\
 			                              & = \mat{A}\cancel{\qty(\mat{A}^{\top}\mat{A})^{-1}}\cancel{\qty(\mat{A}^{\top}\mat{A}) } \\
@@ -184,6 +184,38 @@
 			                              & = \mat{A}\qty(\mat{A}^{\top}\mat{A})^{-1}\mat{A}^\top                 \\
 			                              & =\mat{A}\mat{A}^+.
 		      \end{align*}
+		      Then for a full rank matrix with more columns than rows, \(\mat{A}^+ = \mat{A}^\top\qty(\mat{A}\mat{A}^\top)^{-1}\), and we have
+		      \begin{align*}
+			      \mat{A}\mat{A}^+\mat{A} & = \mat{A}\mat{A}^\top\qty(\mat{A}\mat{A}^\top)^{-1}\mat{A}                               \\
+			                              & = \cancel{\qty(\mat{A}\mat{A}^{\top})}\cancel{\qty(\mat{A}\mat{A}^{\top})^{-1} } \mat{A} \\
+			                              & = \mat{A}.
+		      \end{align*}
+		      Then,
+		      \begin{align*}
+			      \mat{A}^+\mat{A}\mat{A}^+ & = \mat{A}^+\mat{A}\mat{A}^\top\qty(\mat{A}\mat{A}^\top)^{-1}                         \\
+			                                & = \mat{A}^+\cancel{\qty(\mat{A}\mat{A}^{\top})}\cancel{(\mat{A}\mat{A}^{\top})^{-1}} \\
+			                                & = \mat{A}^+.
+		      \end{align*}
+		      Further,
+		      \begin{align*}
+			      (\mat{A}^+\mat{A})^\top & = \qty(\qty(\mat{A}^\top(\mat{A}\mat{A}^\top)^{-1})\mat{A})^{\top} \\
+			                              & = \mat{A}^\top \qty(\mat{A}^\top(\mat{A}\mat{A}^\top)^{-1})^\top   \\
+			                              & = \mat{A}^\top \qty((\mat{A}\mat{A}^\top)^{-1})^\top \mat{A}       \\
+			                              & = \mat{A}^\top \qty((\mat{A}\mat{A}^\top)^\top)^{-1} \mat{A}       \\
+			                              & = \mat{A}^\top \qty(\mat{A}\mat{A}^\top)^{-1} \mat{A}              \\
+			                              & = \mat{A}^+\mat{A}.
+		      \end{align*}
+		      Finally,
+		      \begin{align*}
+			      (\mat{A}\mat{A}^+)^\top & = \qty(\mat{A}\mat{A}^\top(\mat{A}\mat{A}^\top)^{-1})^\top \\
+			                              & = \mat{I},
+		      \end{align*}
+		      and
+		      \begin{align*}
+			      \mat{A}\mat{A}^+ & = \mat{A}\mat{A}^\top(\mat{A}\mat{A}^\top)^{-1} \\
+			                       & = \mat{I},
+		      \end{align*}
+		      so \(\mat{A}\mat{A}^+ = (\mat{A}\mat{A}^+)^\top\).
 	      \end{proof}
 
 	      % 5
