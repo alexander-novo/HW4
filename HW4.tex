@@ -20,6 +20,9 @@
 \usepackage[newfloat]{minted}
 \usepackage{xcolor, mdframed}
 
+\usetikzlibrary{external}
+\tikzexternalize[prefix=out/]
+
 \setmathfont{latinmodern-math.otf}
 \setmathfont{texgyrepagella-math.otf}[range=bb]
 
@@ -68,7 +71,6 @@
 \newcommand{\reals}{\mathbb{R}}
 \newcommand{\ints}  {\mathbb{Z}}
 \newcommand{\mat}[1]{\symbfit{#1}}
-\allowdisplaybreaks
 \begin{document}
 
 \maketitle
@@ -139,17 +141,19 @@
 			      \abs{\alpha_{ii}} - \sum_{\substack{j=1\\j\neq i,k}} \abs{\alpha_{ji}} > \abs{\alpha_{ki}}. \label{eq:diagdomk}
 		      \end{equation}
 		      We have
-		      \begin{align*}
-			      \abs{\beta_{ii}} & \stackrel{\mathclap{\eqref{eq:bji}}}{=} \abs{\alpha_{j+1,i+1} - \frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}}                                                                                                                                                   \\
-			                       & \geq \abs{\alpha_{j+1,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}} \qquad\text{by reverse triangle inequality}                                                                                                                                    \\
-			                       & \stackrel{\mathclap{\eqref{eq:diagdom}}}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}}                                                                                                        \\
-			                       & \stackrel{\mathclap{\eqref{eq:diagdomk}}}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}}\qty( \abs{\alpha_{11}} - \sum_{\substack{j=1\\j\neq 1,i+1}}^n \abs{\alpha_{j,1}})                             \\
-			                       & = \sum_{\substack{j=1\\j\neq i+1}}^n \abs{a_{j,i+1}} - \abs{\alpha_{1,i+1}} + \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}} \sum_{\substack{j=1\\j\neq 1,i+1}}^n \abs{\alpha_{j,1}}                                                                                \\
-			                       & = \overbrace{\cancel{\abs{a_{1,i+1}}}+\sum_{\substack{j=2\\j\neq i+1}}^n \abs{a_{j,i+1}}}^{\text{split }j=1\text{ term out}} - \cancel{\abs{\alpha_{1,i+1}}} + \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}} \sum_{\substack{j=2\\j\neq i+1}}^n \abs{\alpha_{j,1}} \\
-			                       & = \sum_{\substack{j=2\\j\neq i+1}}^n \abs{a_{j,i+1}} + \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}} \sum_{\substack{j=2\\j\neq i+1}}^n \abs{\alpha_{j,1}}                                                                                                         \\
-			                       & = \sum_{\substack{j=2\\j\neq i+1}}^n \qty(\abs{a_{j,i+1}} + \frac{\abs{\alpha_{1,i+1}}\abs{\alpha_{j,1}}}{\abs{\alpha_{11}}})                                                                                                                                       \\
-			                       & \stackrel{\mathclap{\eqref{eq:bji}}}{\geq}  \sum_{\substack{j=1\\j\neq i}}^{n-1} \abs{b_{ji}}.                                                                                                                                                                      \\
-		      \end{align*}
+			      {
+				      \allowdisplaybreaks
+				      \begin{align*}
+					      \abs{\beta_{ii}} & \stackrel{\mathclap{\eqref{eq:bji}}}{=} \abs{\alpha_{j+1,i+1} - \frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}}                                                                                                                                                   \\
+					                       & \geq \abs{\alpha_{j+1,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}} \qquad\text{by reverse triangle inequality}                                                                                                                                    \\
+					                       & \stackrel{\mathclap{\eqref{eq:diagdom}}}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}}                                                                                                        \\
+					                       & \stackrel{\mathclap{\eqref{eq:diagdomk}}}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}}\qty( \abs{\alpha_{11}} - \sum_{\substack{j=1\\j\neq 1,i+1}}^n \abs{\alpha_{j,1}})                             \\
+					                       & = \sum_{\substack{j=1\\j\neq i+1}}^n \abs{a_{j,i+1}} - \abs{\alpha_{1,i+1}} + \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}} \sum_{\substack{j=1\\j\neq 1,i+1}}^n \abs{\alpha_{j,1}}                                                                                \\
+					                       & = \overbrace{\cancel{\abs{a_{1,i+1}}}+\sum_{\substack{j=2\\j\neq i+1}}^n \abs{a_{j,i+1}}}^{\text{split }j=1\text{ term out}} - \cancel{\abs{\alpha_{1,i+1}}} + \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}} \sum_{\substack{j=2\\j\neq i+1}}^n \abs{\alpha_{j,1}} \\
+					                       & = \sum_{\substack{j=2\\j\neq i+1}}^n \abs{a_{j,i+1}} + \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}} \sum_{\substack{j=2\\j\neq i+1}}^n \abs{\alpha_{j,1}}                                                                                                         \\
+					                       & = \sum_{\substack{j=2\\j\neq i+1}}^n \qty(\abs{a_{j,i+1}} + \frac{\abs{\alpha_{1,i+1}}\abs{\alpha_{j,1}}}{\abs{\alpha_{11}}})                                                                                                                                       \\
+					                       & \stackrel{\mathclap{\eqref{eq:bji}}}{\geq}  \sum_{\substack{j=1\\j\neq i}}^{n-1} \abs{b_{ji}}.                                                                                                                                                                      \\
+				      \end{align*}}
 		      Thus, \(\mat{B}\) is diagonally dominant. Then, by induction each iteration of Gaussian elimination on a diagonally dominant matrix produces a diagonally dominant submatrix, so no pivoting is required.
 	      \end{proof}
 
@@ -298,19 +302,19 @@
 			            \begin{proof}\hfill
 				            \begin{itemize}
 					            \item[\(\implies\)] For a trailing submatrix \(\mat{A}_{ii}\), we have
-					                  \[
-						                  \mat{A} = \mqty[\mat{A}_{11}&\mat{A}_{1i}\\\mat{A}_{i1}&\mat{A}_{ii}] = \mqty[\mat{U}_{11}&\mat{U}_{1i}\\\mat{0}&\mat{U}_{ii}] \mqty[\mat{L}_{11}&\mat{0}\\\mat{L}_{i1}&\mat{L}_{ii}] = \mat{U}\mat{L}.
-					                  \]
-					                  Then \(\det(\mat{A}_{ii}) = \det(\mat{U}_{ii}\mat{L}_{ii}) = \det(\mat{U}_{ii})\det(\mat{L}_{ii}) = 1 \cdot \prod_{k=1}^i (\mat{L}_{ii})_{kk} \neq 0\), since \(\mat{U}\) is unit upper triangular and \(\mat{L}\) is nonsingular lower triangular.
+						            \[
+							            \mat{A} = \mqty[\mat{A}_{11}&\mat{A}_{1i}\\\mat{A}_{i1}&\mat{A}_{ii}] = \mqty[\mat{U}_{11}&\mat{U}_{1i}\\\mat{0}&\mat{U}_{ii}] \mqty[\mat{L}_{11}&\mat{0}\\\mat{L}_{i1}&\mat{L}_{ii}] = \mat{U}\mat{L}.
+						            \]
+						            Then \(\det(\mat{A}_{ii}) = \det(\mat{U}_{ii}\mat{L}_{ii}) = \det(\mat{U}_{ii})\det(\mat{L}_{ii}) = 1 \cdot \prod_{k=1}^i (\mat{L}_{ii})_{kk} \neq 0\), since \(\mat{U}\) is unit upper triangular and \(\mat{L}\) is nonsingular lower triangular.
 					            \item[\(\impliedby\)] Note that this is trivially true for a \(1 \times 1\) matrix. Then, by induction, assume there exist a unique unit upper triangular matrix \(\mat{U}\) and nonsingular lower triangular matrix \(\mat{L}\) such that \(\mat{A} = \mat{U}\mat{L}\) for all \(n-1 \times n-1\) matrices with all trailing principal submatrices nonsingular. For
-					                  \begin{align*}
-						                  \mat{A}       & = \mqty[\hat{\mat{A}} & \vec{a} \\\vec{c}^\top & \alpha_{nn}],               \\
-						                  \shortintertext{and}
-						                  \hat{\mat{A}} & = \mat{U}_1\mat{L}_1,                                                        \\
-						                  \shortintertext{which exist by assumption, we have}
-						                  \mat{A}       & = \mqty[\mat{U}_1     & \vec{l} \\\vec{0}^\top & 1]\mqty[\mat{L}_1 & \vec{0} \\\vec{c}^\top&\alpha_{nn}],
-					                  \end{align*}
-					                  where \(\vec{l} = \vec{a} / \alpha_{nn}\). Note, then that \(0 \neq \det(\mat{A}) = \det(\mat{L}_1) \alpha_{nn}\), so \(\alpha_{nn} \neq 0\), and the lower triangular matrix is nonsingular.
+						            \begin{align*}
+							            \mat{A}       & = \mqty[\hat{\mat{A}} & \vec{a} \\\vec{c}^\top & \alpha_{nn}],               \\
+							            \shortintertext{and}
+							            \hat{\mat{A}} & = \mat{U}_1\mat{L}_1,                                                        \\
+							            \shortintertext{which exist by assumption, we have}
+							            \mat{A}       & = \mqty[\mat{U}_1     & \vec{l} \\\vec{0}^\top & 1]\mqty[\mat{L}_1 & \vec{0} \\\vec{c}^\top&\alpha_{nn}],
+						            \end{align*}
+						            where \(\vec{l} = \vec{a} / \alpha_{nn}\). Note, then that \(0 \neq \det(\mat{A}) = \det(\mat{L}_1) \alpha_{nn}\), so \(\alpha_{nn} \neq 0\), and the lower triangular matrix is nonsingular.
 				            \end{itemize}
 			            \end{proof}
 		            \end{answer}
