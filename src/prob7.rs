@@ -15,11 +15,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         let a = DMatrix::<f64>::from_distribution(n, n, &StandardNormal, &mut rand::thread_rng())
             / (n as f64).sqrt();
 
-        // $\(\rho_{pp} = \sfrac{(\max_{i,j} |u_{ij}|)}{(\max_{i,j} |a_{ij}|)}\)$
-        // store $\(\max_{i,j} |a_{ij}| \)$
+        // $\(\|A\|_{max} = \max_{i,j} |a_{ij}|\)$
         let a_max = a.amax();
         let u_max = LU::new(a).u().amax();
 
+        // $\(\rho_{pp} = \sfrac{\|U\|_{max}}{\|A\|_{max}}\)$
         let rho_pp = u_max / a_max;
 
         writeln!(&f, "{n} {rho_pp}")?;
