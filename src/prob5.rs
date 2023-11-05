@@ -42,5 +42,5 @@ fn ul_decomp(mut ul: Matrix4<f64>) -> Matrix4<f64> {
         let mut a_hat = ul.view_mut((0, 0), (i, i));
         a_hat -= lct;
     }
-    return ul;
+    ul
 }
