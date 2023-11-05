@@ -340,6 +340,17 @@
 	      % 6
 	\item Even though we rarely need to compute the inverse of a matrix, let us think about it in this problem. Let \(\mat{A} \in \reals^{n\times n}\) be an invertible matrix. Describe an algorithm (based on the LU Decomposition/Gaussian Elimination) that computes \(\mat{A}^{-1}\) with an operation count of \(8n^3/3\) flops (ignoring the lower order terms).
 	      \begin{answer}
+			\begin{algorithm}
+				\caption{An algorithm to compute the inverse of a matrix \(\mat{A}\) using the LU decomposition.} 
+				\label{alg:inverse}
+				\KwData{\(\mat{A}\)}
+				\KwResult{\(\mat{A}^{-1}\)}
+				Factorize \(\mat{A}=\mat{LU}\)\;
+				\For{$i\leftarrow 1$ \KwTo $n$}{
+				Solve \(\mat{LU}\vec{b}_i=\vec{e}_i\)\;
+				}				
+				\(\mat{A}^{-1} \gets [\vec{b}_1\ \vec{b}_2\ \cdots\ \vec{b}_n]\);
+			\end{algorithm}
 	      \end{answer}
 
 	      % 7
