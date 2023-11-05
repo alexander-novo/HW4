@@ -4,7 +4,7 @@ use std::{
     io::Write,
 };
 
-use nalgebra::Matrix4;
+use nalgebra::{Dim, Matrix4, OMatrix};
 
 fn main() -> Result<(), Box<dyn Error>> {
     // fill $\(\mat{A}\)$ with given values, column major order
@@ -30,7 +30,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 
 /// Computes UL decomposition in place, note input matrix is overridden
-fn ul_decomp(mut ul: Matrix4<f64>) -> Matrix4<f64> {
+fn ul_decomp<R: Dim, C: Dim>(mut ul: OMatrix<f64, R, C>) -> OMatrix<f64, R, C>
+where
+    nalgebra::DefaultAllocator: nalgebra::allocator::Allocator<f64, R, C>,
+{
     // rust is 0 indexed
     for i in (1..4).rev() {
         let alphaii = ul[(i, i)];
