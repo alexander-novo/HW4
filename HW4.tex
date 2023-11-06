@@ -345,13 +345,11 @@
 		      \begin{algorithm}
 			      \caption{An algorithm to compute the inverse of a matrix \(\mat{A}\) using the LU decomposition.}
 			      \label{alg:inverse}
-			      \KwData{\(\mat{A}\)}
+			      \KwData{\(\mat{A}\) and \(n\times n\) matrix}
 			      \KwResult{\(\mat{A}^{-1}\)}
-			      Factorize \(\mat{A}=\mat{LU}\)\;
-			      \tcc{LU decomposition costs \(\sfrac23\ n^3\).}
+			      Factorize \(\mat{A}=\mat{LU}\)\ \tcp*[r]{\(\sfrac23\ n^3\)}
 			      \For{$i\leftarrow 1$ \KwTo $n$}{
-				      Solve \(\mat{LU}\vec{b}_i=\vec{e}_i\)\;
-				      \tcc{Solving a linear equation from LU decomposition costs \(2\ n^2\).}
+				      Solve \(\mat{LU}\vec{b}_i=\vec{e}_i\)\ \tcp*[r]{\(2\ n^2\)}
 			      }
 			      \(\mat{A}^{-1} \gets [\vec{b}_1\ \vec{b}_2\ \cdots\ \vec{b}_n]\);
 		      \end{algorithm}
