@@ -64,8 +64,7 @@
 \lhead{Math 5424 HW 4}
 
 \pagenumbering{arabic} % Change page numbering to lowercase roman for pre-pages
-%\xrightswishingghost{\phantom{text}}
-\renewcommand{\qedsymbol}{$\bigpumpkin$}
+\renewcommand{\qedsymbol}{{\fontspec{Noto Emoji}\symbol{"1F9CC}}} % Troll
 
 \newcommand{\comp}  {\mathbb{C}}
 \newcommand{\reals}{\mathbb{R}}
@@ -182,11 +181,12 @@
 		      \begin{align*}
 			      \|\mat{X}\|_F^2 & =  \|\mat{A}^+\mat{C}\mat{B}^+ + \tilde{\mat{X}}\|_F^2                         \\
 			                      & = \sum_{i} \|(\mat{A}^+\mat{C}\mat{B}^+)_i^\top + \tilde{\mat{X}}_i^\top\|_2^2 \\
-			      \shortintertext{(since \((\mat{A}^+\mat{C}\mat{B}^+)_i^\top \perp \tilde{\mat{X}}_i^\top\), by Pythagorean Theorem)}
+			      \shortintertext{(since \((\mat{A}^+\mat{C}\mat{B}^+)_i^\top \perp \tilde{\mat{X}}_i^\top\), by Pythagorean Theorem\footnotemark)}
 			                      & \geq \sum_{i} \|(\mat{A}^+\mat{C}\mat{B}^+)_i^\top\|_2^2                       \\
 			      \shortintertext{(note that equality only holds for \(\tilde{\mat{X}} = \mat{0}\))}
 			                      & = \|\mat{A}^+\mat{C}\mat{B}^+\|_F^2,
 		      \end{align*}
+		      \footnotetext{We know how much you enjoy the Pythagorean Theorem, so we have included it here for your grading pleasure.}
 		      so \(\mat{X}_0 = \mat{A}^+C\mat{B}^+\).
 	      \end{proof}
 
