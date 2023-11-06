@@ -340,17 +340,20 @@
 	      % 6
 	\item Even though we rarely need to compute the inverse of a matrix, let us think about it in this problem. Let \(\mat{A} \in \reals^{n\times n}\) be an invertible matrix. Describe an algorithm (based on the LU Decomposition/Gaussian Elimination) that computes \(\mat{A}^{-1}\) with an operation count of \(8n^3/3\) flops (ignoring the lower order terms).
 	      \begin{answer}
-			\begin{algorithm}
-				\caption{An algorithm to compute the inverse of a matrix \(\mat{A}\) using the LU decomposition.} 
-				\label{alg:inverse}
-				\KwData{\(\mat{A}\)}
-				\KwResult{\(\mat{A}^{-1}\)}
-				Factorize \(\mat{A}=\mat{LU}\)\;
-				\For{$i\leftarrow 1$ \KwTo $n$}{
-				Solve \(\mat{LU}\vec{b}_i=\vec{e}_i\)\;
-				}				
-				\(\mat{A}^{-1} \gets [\vec{b}_1\ \vec{b}_2\ \cdots\ \vec{b}_n]\);
-			\end{algorithm}
+		      To compute the inverse of a matrix from the LU decomposition, we must solve two triangular systems \(n\) times. This is to find the \(n\) columns of \(\mat{A}^{-1}\) from the LU decomposition. Thus, the cost to perform this backward substitution is \(2n\) times the cost to solve a single triangular system, which is \(n^2\). Summing this together, the cost of finding \(\mat{A}^{-1}\) is \(\frac23 n^3 + 2n(n^2) = \frac83 n^3 + \mathcal{O}(n^2)\). The algorithm is described in more detail in \cref{alg:inverse}.
+		      \begin{algorithm}
+			      \caption{An algorithm to compute the inverse of a matrix \(\mat{A}\) using the LU decomposition.}
+			      \label{alg:inverse}
+			      \KwData{\(\mat{A}\)}
+			      \KwResult{\(\mat{A}^{-1}\)}
+			      Factorize \(\mat{A}=\mat{LU}\)\;
+			      \tcc{LU decomposition costs \(\sfrac23\ n^3\).}
+			      \For{$i\leftarrow 1$ \KwTo $n$}{
+				      Solve \(\mat{LU}\vec{b}_i=\vec{e}_i\)\;
+				      \tcc{Solving a linear equation from LU decomposition costs \(2\ n^2\).}
+			      }
+			      \(\mat{A}^{-1} \gets [\vec{b}_1\ \vec{b}_2\ \cdots\ \vec{b}_n]\);
+		      \end{algorithm}
 	      \end{answer}
 
 	      % 7
