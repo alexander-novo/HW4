@@ -349,7 +349,7 @@
 			      \KwResult{\(\mat{A}^{-1}\)}
 			      Factorize \(\mat{A}=\mat{LU}\)\ \tcp*[r]{\(\sfrac23\ n^3\)}
 			      \For{$i\leftarrow 1$ \KwTo $n$}{
-				      Solve \(\mat{LU}\vec{b}_i=\vec{e}_i\)\ \tcp*[r]{\(2\ n^2\)}
+				      Solve \(\mat{LU}\vec{b}_i=\vec{e}_i\)\ \tcp*[r]{\(\sum_{i=1}^n \qty(2\ n^2)\)}
 			      }
 			      \(\mat{A}^{-1} \gets [\vec{b}_1\ \vec{b}_2\ \cdots\ \vec{b}_n]\);
 		      \end{algorithm}
