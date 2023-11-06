@@ -71,6 +71,7 @@
 \newcommand{\reals}{\mathbb{R}}
 \newcommand{\ints}  {\mathbb{Z}}
 \newcommand{\mat}[1]{\symbfit{#1}}
+\DeclareMathOperator{\range}{Range}
 \begin{document}
 
 \maketitle
@@ -160,7 +161,32 @@
 	      % 3
 	\item Let \(\mat{A},\ \mat{B}\), and \(\mat{C}\) be matrices with dimensions such that the product \(\mat{A}^\top\mat{C}\mat{B}^\top\) is well defined. Let \(\mathcal{X}\) be the set of matrices \(\mat{X}\) minimizing \(\|\mat{A}\mat{X} \mat{B} - \mat{C}\|_F\), and let \(\mat{X}_0\) be the unique member of \(\mathcal{X}\) minimizing \(\|\mat{X}\|_F\). Show that \(\mat{X}_0 = \mat{A}^+C\mat{B}^+\). Hint: Use the SVDs of \(\mat{A}\) and \(\mat{B}\).
 	      \begin{proof}
-
+		      Let \(\mat{B}\) be of rank \(r\) with left singular vectors \(\vec{u}_i\), right singular vectors \(\vec{v}_i\), and non-zero singular values \(\sigma_i\) for \(i = 1, \dots, r\). From class, to minimize the given norm, we must have
+		      \begin{alignat*}{4}
+			           &  & \mat{A}^+\mat{C}          & = \mat{X}\mat{B}                                                                                                            \\
+			      \iff &  & \mat{A}^+\mat{C}\mat{B}^+ & = \mat{X}\mat{B}\mat{B}^+                                                                                                   \\
+			      \iff &  & \mat{A}^+\mat{C}\mat{B}^+ & = \mat{X}\qty(\sum_{i=1}^r \sigma_i \vec{u}_i\vec{v}_i^\top)\qty(\sum_{i = 1}^r \frac{1}{\sigma_i} \vec{v}_i\vec{u}_i^\top) \\
+			           &  &                           & = \mat{X} \sum_{i = 1}^r \vec{u}_i\cancel{\vec{v}_i^\top\vec{v}_i}\vec{u}_i^\top                                            \\
+			           &  &                           & = \mat{X} \sum_{i = 1}^r \vec{u}_i\vec{u}_i^\top.                                                                           \\
+		      \end{alignat*}
+		      Then our set
+		      \[\mathcal{X} = \left\{\mat{X} \middle| \mat{X} \sum_{i = 1}^r \vec{u}_i\vec{u}_i^\top = \mat{A}^+\mat{C}\mat{B}^+\right\}.\]
+		      The matrix \(\sum_{i = 1}^r \vec{u}_i\vec{u}_i^\top\) is the projection matrix onto \(\range(\mat{B})\), so \(\mathcal{X}\) is nonempty if and only if \(\mat{A}^+\mat{C}\mat{B}^+ \in \mathcal{X}\), since if the row vectors \((\mat{A}^+\mat{C}\mat{B}^+)_i^\top\not\in \range(\mat{B})\), then this equality could never hold. We ensure that \(\mathcal{X}\) is nonempty by verifying
+		      \begin{align*}
+			      \mat{A}^+\mat{C}\mat{B}^+\sum_{i = 1}^r \vec{u}_i\vec{u}_i^\top & = \mat{A}^+\mat{C}\qty(\sum_{i = 1}^r \frac{1}{\sigma_i}\vec{v}_i\vec{u}_i^\top)\sum_{i = 1}^r \vec{u}_i\vec{u}_i^\top \\
+			                                                                      & = \mat{A}^+\mat{C}\sum_{i = 1}^r \frac{1}{\sigma_i}\vec{v}_i\cancel{\vec{u}_i^\top\vec{u}_i}\vec{u}_i^\top             \\
+			                                                                      & = \mat{A}^+\mat{C}\mat{B}^+.
+		      \end{align*}
+		      As well, we must have \(\mat{X} = \mat{A}^+\mat{C}\mat{B}^+ + \tilde{\mat{X}}\), where \(\tilde{\mat{X}} \sum_{i = 1}^r \vec{u}_i\vec{u}_i^\top = \mat{0}\), i.e. row vectors \(\tilde{\mat{X}}_i^\top \perp \range(\mat{B})\) for all \(\mat{X} \in \mathcal{X}\). Then
+		      \begin{align*}
+			      \|\mat{X}\|_F^2 & =  \|\mat{A}^+\mat{C}\mat{B}^+ + \tilde{\mat{X}}\|_F^2                         \\
+			                      & = \sum_{i} \|(\mat{A}^+\mat{C}\mat{B}^+)_i^\top + \tilde{\mat{X}}_i^\top\|_2^2 \\
+			      \shortintertext{(since \((\mat{A}^+\mat{C}\mat{B}^+)_i^\top \perp \tilde{\mat{X}}_i^\top\), by Pythagorean Theorem)}
+			                      & \geq \sum_{i} \|(\mat{A}^+\mat{C}\mat{B}^+)_i^\top\|_2^2                       \\
+			      \shortintertext{(note that equality only holds for \(\tilde{\mat{X}} = \mat{0}\))}
+			                      & = \|\mat{A}^+\mat{C}\mat{B}^+\|_F^2,
+		      \end{align*}
+		      so \(\mat{X}_0 = \mat{A}^+C\mat{B}^+\).
 	      \end{proof}
 
 	      % 4
@@ -277,7 +303,7 @@
 			            \begin{algorithm}
 				            \caption{An iterative algorithm to factorize \(\mat{A} = \mat{U}\mat{L}\) where \(\mat{U}\) is unit upper triangular and \(\mat{L}\) is lower triangular.}
 				            \label{alg:ul-iterative}
-				            \KwData{\(\mat{A}\)}
+				            \KwData{\(\mat{A}\) - an \(n \times n\) matrix}
 				            \KwResult{\(\mat{UL}\) - a single matrix which stores the entries of \(\mat{U}\) above the diagonal and the entries of \(\mat{L}\) below the diagonal.}
 				            \(\mat{UL} \gets \mat{A}\)\;
 				            \For{$i\leftarrow n$ \KwTo $2$}{
@@ -302,19 +328,19 @@
 			            \begin{proof}\hfill
 				            \begin{itemize}
 					            \item[\(\implies\)] For a trailing submatrix \(\mat{A}_{ii}\), we have
-						            \[
-							            \mat{A} = \mqty[\mat{A}_{11}&\mat{A}_{1i}\\\mat{A}_{i1}&\mat{A}_{ii}] = \mqty[\mat{U}_{11}&\mat{U}_{1i}\\\mat{0}&\mat{U}_{ii}] \mqty[\mat{L}_{11}&\mat{0}\\\mat{L}_{i1}&\mat{L}_{ii}] = \mat{U}\mat{L}.
-						            \]
-						            Then \(\det(\mat{A}_{ii}) = \det(\mat{U}_{ii}\mat{L}_{ii}) = \det(\mat{U}_{ii})\det(\mat{L}_{ii}) = 1 \cdot \prod_{k=1}^i (\mat{L}_{ii})_{kk} \neq 0\), since \(\mat{U}\) is unit upper triangular and \(\mat{L}\) is nonsingular lower triangular.
+					                  \[
+						                  \mat{A} = \mqty[\mat{A}_{11}&\mat{A}_{1i}\\\mat{A}_{i1}&\mat{A}_{ii}] = \mqty[\mat{U}_{11}&\mat{U}_{1i}\\\mat{0}&\mat{U}_{ii}] \mqty[\mat{L}_{11}&\mat{0}\\\mat{L}_{i1}&\mat{L}_{ii}] = \mat{U}\mat{L}.
+					                  \]
+					                  Then \(\det(\mat{A}_{ii}) = \det(\mat{U}_{ii}\mat{L}_{ii}) = \det(\mat{U}_{ii})\det(\mat{L}_{ii}) = 1 \cdot \prod_{k=1}^i (\mat{L}_{ii})_{kk} \neq 0\), since \(\mat{U}\) is unit upper triangular and \(\mat{L}\) is nonsingular lower triangular.
 					            \item[\(\impliedby\)] Note that this is trivially true for a \(1 \times 1\) matrix. Then, by induction, assume there exist a unique unit upper triangular matrix \(\mat{U}\) and nonsingular lower triangular matrix \(\mat{L}\) such that \(\mat{A} = \mat{U}\mat{L}\) for all \(n-1 \times n-1\) matrices with all trailing principal submatrices nonsingular. For
-						            \begin{align*}
-							            \mat{A}       & = \mqty[\hat{\mat{A}} & \vec{a} \\\vec{c}^\top & \alpha_{nn}],               \\
-							            \shortintertext{and}
-							            \hat{\mat{A}} & = \mat{U}_1\mat{L}_1,                                                        \\
-							            \shortintertext{which exist by assumption, we have}
-							            \mat{A}       & = \mqty[\mat{U}_1     & \vec{l} \\\vec{0}^\top & 1]\mqty[\mat{L}_1 & \vec{0} \\\vec{c}^\top&\alpha_{nn}],
-						            \end{align*}
-						            where \(\vec{l} = \vec{a} / \alpha_{nn}\). Note, then that \(0 \neq \det(\mat{A}) = \det(\mat{L}_1) \alpha_{nn}\), so \(\alpha_{nn} \neq 0\), and the lower triangular matrix is nonsingular.
+					                  \begin{align*}
+						                  \mat{A}       & = \mqty[\hat{\mat{A}} & \vec{a} \\\vec{c}^\top & \alpha_{nn}],               \\
+						                  \shortintertext{and}
+						                  \hat{\mat{A}} & = \mat{U}_1\mat{L}_1,                                                        \\
+						                  \shortintertext{which exist by assumption, we have}
+						                  \mat{A}       & = \mqty[\mat{U}_1     & \vec{l} \\\vec{0}^\top & 1]\mqty[\mat{L}_1 & \vec{0} \\\vec{c}^\top&\alpha_{nn}],
+					                  \end{align*}
+					                  where \(\vec{l} = \vec{a} / \alpha_{nn}\). Note, then that \(0 \neq \det(\mat{A}) = \det(\mat{L}_1) \alpha_{nn}\), so \(\alpha_{nn} \neq 0\), and the lower triangular matrix is nonsingular.
 				            \end{itemize}
 			            \end{proof}
 		            \end{answer}
