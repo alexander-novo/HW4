@@ -122,15 +122,15 @@
 	      % 2
 	\item Matrix \(\mat{A}\) is called \emph{strictly column diagonally dominant}, or diagonally dominant for short, if
 	      \begin{equation}
-		      |a_{ii}| > \sum_{j=1, j \neq i}^{n} |a_{ji}| \label{eq:diagdom}
+		      |\alpha_{ii}| > \sum_{j=1, j \neq i}^{n} |\alpha_{ji}| \label{eq:diagdom}
 	      \end{equation}
-	      Show that Gaussian elimination with partial pivoting does not actually permute any rows, i.e., that it is identical to Gaussian elimination without pivoting. Hint: Show that after one step of Gaussian elimination, the trailing \((n - 1)\text{-by-}(n - 1)\) submatrix, the \emph{Schur complement} of \(a_{11}\) in \(\mat{A}\), is still diagonally dominant.
+	      Show that Gaussian elimination with partial pivoting does not actually permute any rows, i.e., that it is identical to Gaussian elimination without pivoting. Hint: Show that after one step of Gaussian elimination, the trailing \((n - 1)\text{-by-}(n - 1)\) submatrix, the \emph{Schur complement} of \(\alpha_{11}\) in \(\mat{A}\), is still diagonally dominant.
 	      \begin{proof}
 		      For a diagonally dominant matrix \(\mat{A}\), the first step of Gaussian elimination with partial pivoting does not permute any rows, since \(|\alpha_{ii}| > \sum_{j=1, j \neq i}^{n} |\alpha_{ji}|\) and thus \(|\alpha_{ii}| > |\alpha_{ji}|\) for any \(j\neq i\). Then, we have the decomposition for \(\mat{A}\) given by the first step of Gaussian elimination as
 		      \begin{align*}
-			      \mat{A} & = \mqty[\alpha_{11} & \vec{c}^{\top} \\ \vec{a} & \hat{\mat{A}}]                                                                        \\
-			              & = \mqty[1           & 0              \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} \vec{c}^{\top} \\ 0 & \hat{\mat{A}}-\vec{l}\vec{c}^{\top}] \\
-			              & = \mqty[1           & 0              \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} \vec{c}^{\top}                                             \\ 0 & \mat{B}]
+			      \mat{A} & = \mqty[\alpha_{11} & \vec{c}^{\top} \\ \vec{a} & \hat{\mat{A}}]                                                                          \\
+			              & = \mqty[1           & 0              \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} & \vec{c}^{\top} \\ 0 & \hat{\mat{A}}-\vec{l}\vec{c}^{\top}] \\
+			              & = \mqty[1           & 0              \\ \vec{l} & \mat{I}] \mqty[\alpha_{11} & \vec{c}^{\top}                                             \\ 0 & \mat{B}]
 		      \end{align*}
 		      where \(\vec{l} = \frac{\vec{a}}{\alpha_{11}}\). Note that \(c_i = \alpha_{1,i + 1},\ l_i = \frac{\alpha_{i + 1, 1}}{\alpha_{11}}\). Then, denote the submatrix \(\mat{B}=\hat{\mat{A}}-\vec{l}\vec{c}^{\top}\). Now, it is sufficient to show that \(\mat{B}\) is diagonally dominant, since then we could continue each step of Gaussian elimination recursively always getting a diagonally dominant submatrix. First note
 		      \begin{equation}
@@ -144,15 +144,16 @@
 			      {
 				      \allowdisplaybreaks
 				      \begin{align*}
-					      \abs{\beta_{ii}} & \stackrel{\mathclap{\eqref{eq:bji}}}{=} \abs{\alpha_{j+1,i+1} - \frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}}                                                                                                                                                   \\
-					                       & \geq \abs{\alpha_{j+1,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}} \qquad\text{by reverse triangle inequality}                                                                                                                                    \\
+					      \abs{\beta_{ii}} & \stackrel{\mathclap{\eqref{eq:bji}}}{=} \abs{\alpha_{i+1,i+1} - \frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}}                                                                                                                                                   \\
+					                       & \geq \abs{\alpha_{i+1,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}} \qquad\text{by reverse triangle inequality}                                                                                                                                    \\
 					                       & \stackrel{\mathclap{\eqref{eq:diagdom}}}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \abs{\frac{\alpha_{i+1,1}\alpha_{1,i+1}}{\alpha_{11}}}                                                                                                        \\
 					                       & \stackrel{\mathclap{\eqref{eq:diagdomk}}}{>} \sum_{\substack{j=1\\j\neq i+1}}^n \abs{\alpha_{j,i+1}} - \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}}\qty( \abs{\alpha_{11}} - \sum_{\substack{j=1\\j\neq 1,i+1}}^n \abs{\alpha_{j,1}})                             \\
 					                       & = \sum_{\substack{j=1\\j\neq i+1}}^n \abs{a_{j,i+1}} - \abs{\alpha_{1,i+1}} + \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}} \sum_{\substack{j=1\\j\neq 1,i+1}}^n \abs{\alpha_{j,1}}                                                                                \\
 					                       & = \overbrace{\cancel{\abs{a_{1,i+1}}}+\sum_{\substack{j=2\\j\neq i+1}}^n \abs{a_{j,i+1}}}^{\text{split }j=1\text{ term out}} - \cancel{\abs{\alpha_{1,i+1}}} + \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}} \sum_{\substack{j=2\\j\neq i+1}}^n \abs{\alpha_{j,1}} \\
 					                       & = \sum_{\substack{j=2\\j\neq i+1}}^n \abs{a_{j,i+1}} + \frac{\abs{\alpha_{1,i+1}}}{\abs{\alpha_{11}}} \sum_{\substack{j=2\\j\neq i+1}}^n \abs{\alpha_{j,1}}                                                                                                         \\
 					                       & = \sum_{\substack{j=2\\j\neq i+1}}^n \qty(\abs{a_{j,i+1}} + \frac{\abs{\alpha_{1,i+1}}\abs{\alpha_{j,1}}}{\abs{\alpha_{11}}})                                                                                                                                       \\
-					                       & \stackrel{\mathclap{\eqref{eq:bji}}}{\geq}  \sum_{\substack{j=1\\j\neq i}}^{n-1} \abs{b_{ji}}.                                                                                                                                                                      \\
+					                       & \geq \sum_{\substack{j=2\\j\neq i+1}}^n \qty(a_{j,i+1} - \frac{\alpha_{1,i+1}\alpha_{j,1}}{\alpha_{11} })                                                                                                                                                           \\
+					                       & \stackrel{\mathclap{\eqref{eq:bji}}}{=}  \sum_{\substack{j=1\\j\neq i}}^{n-1} \abs{\beta_{ji}}.                                                                                                                                                                     \\
 				      \end{align*}}
 		      Thus, \(\mat{B}\) is diagonally dominant. Then, by induction each iteration of Gaussian elimination on a diagonally dominant matrix produces a diagonally dominant submatrix, so no pivoting is required.
 	      \end{proof}
